@@ -14,6 +14,7 @@ provider "aws" {
 resource "aws_instance" "ec2_instance" {
   ami           = "ami-047d7c33f6e7b4bc4"
   instance_type = "t2.micro"
+  vpc_security_group_ids = [aws_security_group.prometheus_grafana_sg.id]
 
   tags = {
     Name = "MyEC2Instance"
@@ -28,7 +29,7 @@ resource "aws_security_group" "prometheus_grafana_sg" {
     to_port     = 9090
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-    
+
   }
 
   ingress {
@@ -38,9 +39,4 @@ resource "aws_security_group" "prometheus_grafana_sg" {
     cidr_blocks = ["0.0.0.0/0"]
 
   }
-}
-
-resource "aws_instance_associate_security_group" "prometheus_grafana_assoc" {
-  instance_id = aws_instance.ec2_instance.id
-  security_group_id = aws_security_group.prometheus_grafana_sg.id
 }

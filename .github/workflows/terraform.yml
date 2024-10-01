@@ -22,17 +22,3 @@ jobs:
         env:
             AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-      - name: Install Ansible
-        run: |
-          sudo apt-get update
-          sudo apt-get install ansible -y
-
-      - name: Install Prometheus and Grafana
-        run: |
-          sudo apt-get update
-          sudo apt-get install prometheus grafana -y
-
-      - name: Start Prometheus and Grafana
-        run: |
-          sudo systemctl start prometheus grafana

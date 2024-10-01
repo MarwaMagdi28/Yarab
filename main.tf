@@ -25,6 +25,13 @@ resource "aws_security_group" "prometheus_grafana_sg" {
   name = "prometheus-grafana-sg"
 
   ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["13.52.6.112/29"]
+  }
+  
+  ingress {
     from_port   = 9090
     to_port     = 9090
     protocol    = "tcp"

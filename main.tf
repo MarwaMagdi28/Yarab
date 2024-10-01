@@ -38,8 +38,7 @@ resource "aws_security_group" "prometheus_grafana_sg" {
   }
 }
 
-resource "aws_instance_associate_security_group"   
- "prometheus_grafana_assoc" {
+resource "aws_instance_associate_security_group" "prometheus_grafana_assoc" {
   instance_id = aws_instance.ec2_instance.id
   security_group_id = aws_security_group.prometheus_grafana_sg.id
 }

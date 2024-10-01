@@ -22,12 +22,9 @@ resource "aws_instance" "ec2_instance" {
   user_data = <<-EOF
             #!/bin/bash
             sudo yum update -y
-            sudo yum install -y yum-utils device-mapper-user-space-libs
-            sudo yum-config-manager --add-repo https://download.docker.com/linux/amazon/docker.repo
-            sudo yum install docker-ce docker-ce-cli containerd.io
-            sudo systemctl start docker
-            sudo systemctl enable docker
-            sudo docker run -d --name prometheus -p 9090:9090 prom/prometheus
-            sudo docker run -d --name grafana -p 3000:3000 grafana/grafana
+            sudo yum install -y wget curl git
+            curl -s https://prometheus.io/prometheus-2.43.0.linux-amd64.tar.gz -o prometheus.tar.gz
+            sudo tar -xzvf prometheus.tar.gz -C /usr/local/bin/
+            sudo chown -R ec2-user:ec2-user /usr/local/bin/prometheus
           EOF
 }

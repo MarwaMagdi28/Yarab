@@ -19,4 +19,11 @@ resource "aws_instance" "ec2_instance" {
   tags = {
     Name = "MyEC2Instance"
   }
+
+    user_data = <<-EOF
+            #!/bin/bash
+            sudo apt-get update
+            sudo apt-get install ansible -y
+            sudo systemctl start ansible
+            EOF
 }

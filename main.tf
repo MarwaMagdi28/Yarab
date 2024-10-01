@@ -9,7 +9,6 @@ terraform {
 
 provider "aws" {
   region = "us-west-1" # Replace with your desired AWS region
-  # Add other AWS provider configuration as needed
 }
 
 resource "aws_instance" "ec2_instance" {
@@ -19,11 +18,28 @@ resource "aws_instance" "ec2_instance" {
   tags = {
     Name = "MyEC2Instance"
   }
+}
 
-    user_data = <<-EOF
-            #!/bin/bash
-            sudo apt-get update
-            sudo apt-get install ansible -y
-            sudo systemctl start ansible
-            EOF
+resource "aws_security_group" "prometheus_grafana_sg" {
+  name = "prometheus-grafana-sg"
+
+  ingress {
+    from_port   = 9090
+    to_port     = 9090
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 3000
+    to_port     = 3000
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]   
+  }
+}
+
+resource "aws_instance_associate_security_group"   
+ "prometheus_grafana_assoc" {
+  instance_id = aws_instance.ec2_instance.id
+  security_group_id = aws_security_group.prometheus_grafana_sg.id
 }

@@ -37,22 +37,22 @@ resource "aws_instance" "ec2_instance" {
           sudo mv prometheus /usr/local/bin/
           sudo chown prometheus:prometheus /usr/local/bin/prometheus
           cat <<EOF > /etc/systemd/system/prometheus.service
-          [Unit]
-          Description=Prometheus
+              [Unit]
+              Description=Prometheus
 
-          [Service]
-          User=prometheus
-          Group=prometheus
-          Type=simple
-          ExecStart=/usr/local/bin/prometheus\
-           --config.file=/etc/prometheus/prometheus.yml\
-           --storage.tsdb.path /var/lib/prometheus
-           --web.console.templates=/etc/prometheus/console\
-           --web.console.libraries=/etc/prometheus/console_libraries\
+              [Service]
+              User=prometheus
+              Group=prometheus
+              Type=simple
+              ExecStart=/usr/local/bin/prometheus\
+              --config.file=/etc/prometheus/prometheus.yml\
+              --storage.tsdb.path /var/lib/prometheus
+              --web.console.templates=/etc/prometheus/console\
+              --web.console.libraries=/etc/prometheus/console_libraries\
 
-          [Install]
-          WantedBy=multi-user.target   
-          EOF
+              [Install]
+              WantedBy=multi-user.target   
+              EOF
 
           sudo systemctl daemon-reload
           sudo systemctl start prometheus

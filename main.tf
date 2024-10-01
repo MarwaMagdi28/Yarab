@@ -25,5 +25,5 @@ resource "aws_instance" "ec2_instance" {
 
     provisioner "local-exec" {
     command = "ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -u ec2-user -h ${self.public_ip} ./playbook.yml"
-
+    }
 }

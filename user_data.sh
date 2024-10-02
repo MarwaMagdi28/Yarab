@@ -15,39 +15,47 @@ sudo chown -R prometheus:prometheus /etc/prometheus
 sudo mv prometheus /usr/local/bin/
 sudo chown prometheus:prometheus /usr/local/bin/prometheus
 cat <<EOF > /etc/systemd/system/prometheus.service
-    [Unit]
-    Description=Prometheus
+      [Unit]
+      Description=Prometheus
 
-    [Service]
-    User=prometheus
-    Group=prometheus
-    Type=simple
-    ExecStart=/usr/local/bin/prometheus\
-        --config.file=/etc/prometheus/prometheus.yml\
-        --storage.tsdb.path /var/lib/prometheus\
-        --web.console.templates=/etc/prometheus/console\
-        --web.console.libraries=/etc/prometheus/console_libraries\
+      [Service]
+      User=prometheus
+      Group=prometheus
+      Type=simple
+      ExecStart=/usr/local/bin/prometheus\
+          --config.file=/etc/prometheus/prometheus.yml\
+          --storage.tsdb.path /var/lib/prometheus\
+          --web.console.templates=/etc/prometheus/console\
+          --web.console.libraries=/etc/prometheus/console_libraries\
 
-    [Install]
-    WantedBy=multi-user.target
-  EOF
+      [Install]
+      WantedBy=multi-user.target
+EOF
 
 sudo systemctl daemon-reload
-sudo systemctl start prometheus
 sudo systemctl enable prometheus
-
-
-cat <<EOF > /etc/yum.repos.d/grafana.repo
-   [grafana]
-    name=grafana
-    baseurl=https://packages.grafana.com/oss/rpm
-    repo_gpgcheck=1
-    enabled=1
-    gpgcheck=1
-    gpgkey=https://packages.grafana.com/gpg.key
-  EOF
+sudo systemctl start prometheus
 
 sudo yum update
-sudo yum install grafana
-sudo systemctl start grafana-server
+sudo yum install wget curl git
+sudo yum install systemd
+wget https://dl.grafana.com/enterprise/release/grafana-enterprise-11.2.2.linux-amd64.tar.gz
+tar -zxvf grafana-enterprise-11.2.2.linux-amd64.tar.gz
+cat <<EOF > /etc/systemd/system/grafana.service
+      [Unit]
+      Description=Grafana
+      After=network.target
+
+      [Service]
+      User=grafana
+      Group=grafana
+      ExecStart=/usr/sbin/grafana-server
+
+      [Install]
+      WantedBy=multi-user.target
+EOF
+
+sudo systemctl daemon-reload
 sudo systemctl enable grafana-server
+sudo systemctl start grafana-server
+

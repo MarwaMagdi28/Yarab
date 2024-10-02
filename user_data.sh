@@ -33,29 +33,12 @@ cat <<EOF > /etc/systemd/system/prometheus.service
 EOF
 
 sudo systemctl daemon-reload
-sudo systemctl enable prometheus
 sudo systemctl start prometheus
+sudo systemctl enable prometheus
 
 sudo yum update
 sudo yum install wget curl git
-sudo yum install systemd
-wget https://dl.grafana.com/enterprise/release/grafana-enterprise-11.2.2.linux-amd64.tar.gz
-tar -zxvf grafana-enterprise-11.2.2.linux-amd64.tar.gz
-cat <<EOF > /etc/systemd/system/grafana.service
-      [Unit]
-      Description=Grafana
-      After=network.target
-
-      [Service]
-      User=grafana
-      Group=grafana
-      ExecStart=/usr/sbin/grafana-server
-
-      [Install]
-      WantedBy=multi-user.target
-EOF
-
-sudo systemctl daemon-reload
-sudo systemctl enable grafana-server
+sudo sudo yum install -y https://dl.grafana.com/enterprise/release/grafana-enterprise-11.2.2-1.x86_64.rpm
 sudo systemctl start grafana-server
+sudo systemctl enable grafana-server
 

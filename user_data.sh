@@ -1,4 +1,5 @@
 #!/bin/bash
+#!Install Prometheus
 sudo yum update -y
 sudo adduser --no-create-home --shell /bin/false prometheus
 sudo mkdir /etc/prometheus
@@ -23,14 +24,30 @@ cat <<EOF > /etc/systemd/system/prometheus.service
     Type=simple
     ExecStart=/usr/local/bin/prometheus\
         --config.file=/etc/prometheus/prometheus.yml\
-        --storage.tsdb.path /var/lib/prometheus
+        --storage.tsdb.path /var/lib/prometheus\
         --web.console.templates=/etc/prometheus/console\
         --web.console.libraries=/etc/prometheus/console_libraries\
 
     [Install]
-    WantedBy=multi-user.target   
+    WantedBy=multi-user.target
   EOF
 
 sudo systemctl daemon-reload
 sudo systemctl start prometheus
 sudo systemctl enable prometheus
+
+
+cat <<EOF > /etc/yum.repos.d/grafana.repo
+   [grafana]
+    name=grafana
+    baseurl=https://packages.grafana.com/oss/rpm
+    repo_gpgcheck=1
+    enabled=1
+    gpgcheck=1
+    gpgkey=https://packages.grafana.com/gpg.key
+  EOF
+
+sudo yum update
+sudo yum install grafana
+sudo systemctl start grafana-server
+sudo systemctl enable grafana-server

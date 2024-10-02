@@ -1,4 +1,4 @@
-name: Terraform EC2 and Ansible
+name: Terraform EC2
 
 on:
   push:
